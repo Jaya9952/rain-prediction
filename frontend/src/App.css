@@ -1,0 +1,46 @@
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+form {
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 20px;
+    text-align: left;
+}
+
+input, select, button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+h3.result {
+    margin-top: 20px;
+    font-size: 20px;
+    color: #333;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
