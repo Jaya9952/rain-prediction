@@ -9,22 +9,35 @@ from sklearn.ensemble import RandomForestClassifier
 df = pd.read_csv("data/rainfall_data.csv")
 
 
-df = df[["STATE_UT_NAME", "DISTRICT", "ANNUAL", "Jun-Sep", "Oct-Dec"]]
+print("Available columns:", df.columns.tolist())
 
 
 df.rename(columns={"STATE_UT_NAME": "Location", "ANNUAL": "TotalRainfall"}, inplace=True)
 
 
+df = df[["Location", "TotalRainfall"]].copy()
+df.dropna(inplace=True)
+
+
+monthly_data = pd.DataFrame()
+
+for month in range(1, 13):
+    temp = df.copy()
+    temp["Month"] = month
+    temp["MonthlyRainfall"] = temp["TotalRainfall"] / 12  
+    monthly_data = pd.concat([monthly_data, temp])
+
+
+threshold = monthly_data["MonthlyRainfall"].median()
+monthly_data["RainTomorrow"] = (monthly_data["MonthlyRainfall"] > threshold).astype(int)
+
+
 label_encoder = LabelEncoder()
-df["Location"] = label_encoder.fit_transform(df["Location"])
+monthly_data["LocationEncoded"] = label_encoder.fit_transform(monthly_data["Location"])
 
 
-threshold = df["TotalRainfall"].median()  
-df["RainTomorrow"] = (df["TotalRainfall"] > threshold).astype(int)  
-
-
-X = df.drop(columns=["TotalRainfall", "DISTRICT", "RainTomorrow"])  
-y = df["RainTomorrow"]
+X = monthly_data[["LocationEncoded", "Month"]]
+y = monthly_data["RainTomorrow"]
 
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -43,4 +56,5 @@ joblib.dump(model, "rain_model.pkl")
 joblib.dump(scaler, "scaler.pkl")
 joblib.dump(label_encoder, "label_encoder.pkl")
 
-print("Model trained and saved successfully!")
+print("Model trained for all months based on Location and Month!")
+

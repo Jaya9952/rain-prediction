@@ -3,6 +3,10 @@
 
  cd backend
 pip install -r requirements.txt
+
+
+python model_training.py 
+
 uvicorn main:app --reload
 
 Open http://localhost:8000/docs to test the API.
